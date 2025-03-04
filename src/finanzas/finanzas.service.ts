@@ -1,23 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Finanza } from './finanza.entity';
+import { FinanzasDto } from './dto/finanzas.dto';
 
 @Injectable()
 export class FinanzasService {
   constructor(
     @InjectRepository(Finanza)
-    private readonly finanzaRepository: Repository<Finanza>,
+    private readonly finanzasRepository: Repository<Finanza>,
   ) {}
 
-  // Método para obtener todas las finanzas
   async findAll(): Promise<Finanza[]> {
-    return await this.finanzaRepository.find();
+    return this.finanzasRepository.find();
   }
 
-  // Método para crear una nueva entrada de finanza
-  async create(finanza: Partial<Finanza>): Promise<Finanza> {
-    const newFinanza = this.finanzaRepository.create(finanza);
-    return await this.finanzaRepository.save(newFinanza);
+  async create(finanzaDto: FinanzasDto): Promise<Finanza> {
+    const finanza = this.finanzasRepository.create(finanzaDto);
+    return this.finanzasRepository.save(finanza);
   }
+
+  async update(id: number, finanzaDto: FinanzasDto): Promise<Finanza> {
+    const finanza = await this.finanzasRepository.findOne({ where: { id } });
+    if (!finanza) {
+      throw new NotFoundException(`Finanza con ID ${id} no encontrada`);
+    }
+
+    Object.assign(finanza, finanzaDto);
+    return this.finanzasRepository.save(finanza);
+  }
+
+  async delete(id: number): Promise<{ message: string }> {
+    const finanza = await this.finanzasRepository.findOne({ where: { id } });
+    if (!finanza) {
+      throw new NotFoundException(`Finanza con ID ${id} no encontrada`);
+    }
+
+    await this.finanzasRepository.delete(id);
+    return { message: `Finanza con ID ${id} eliminada correctamente` };
+  }
+
 }

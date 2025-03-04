@@ -1,24 +1,27 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FinanzasService } from './finanzas/finanzas.service';
-import { FinanzasController } from './finanzas/finanzas.controller';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';  // Asegúrate de que la ruta sea correcta
+import { FinanzasModule } from './finanzas/finanzas.module';
 import { Finanza } from './finanzas/finanza.entity';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'srv867.hstgr.io',
-      port: 3306,
-      username: 'u954703204_tortillita',
-      password: 'Nb@N91*5',
-      database: 'u954703204_TortilleriaSys',
-      synchronize: true,  // Desactivar en producción
-      entities: [Finanza],
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      synchronize: process.env.NODE_ENV !== 'production',
+      entities: [Finanza, User],
     }),
-    TypeOrmModule.forFeature([Finanza]),  // Registra la entidad
+    AuthModule,  // Ahora puedes usar AuthModule aquí
+    FinanzasModule,
   ],
-  providers: [FinanzasService],  // Registra el servicio
-  controllers: [FinanzasController],  // Registra el controlador
 })
 export class AppModule {}
