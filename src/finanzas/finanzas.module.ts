@@ -3,15 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FinanzasController } from './finanzas.controller';
 import { FinanzasService } from './finanzas.service';
 import { Finanza } from './finanza.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from '../auth/auth.module'; // Importa el AuthModule
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Finanza]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secretKey',
-      signOptions: { expiresIn: '1h' },
-    }),
+    AuthModule, // Solo importa AuthModule aquí
   ],
   controllers: [FinanzasController],
   providers: [FinanzasService],

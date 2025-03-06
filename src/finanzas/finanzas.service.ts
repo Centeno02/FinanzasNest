@@ -14,7 +14,7 @@ export class FinanzasService {
   async findAll(): Promise<Finanza[]> {
     return this.finanzasRepository.find();
   }
-
+z
   async create(finanzaDto: FinanzasDto): Promise<Finanza> {
     const finanza = this.finanzasRepository.create(finanzaDto);
     return this.finanzasRepository.save(finanza);

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('finanzas')  // Nombre de la tabla en la base de datos
+@Entity('finanzas')  
 export class Finanza {
   @PrimaryGeneratedColumn()
   id: number;
