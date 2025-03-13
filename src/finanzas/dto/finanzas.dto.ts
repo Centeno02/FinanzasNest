@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
 
 export class FinanzasDto {
   @IsEnum(['ingreso', 'gasto'], { message: 'El tipo debe ser ingreso o gasto' })
