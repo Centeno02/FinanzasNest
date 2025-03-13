@@ -8,7 +8,7 @@ import { AuthModule } from '../auth/auth.module'; // Importa el AuthModule
 @Module({
   imports: [
     TypeOrmModule.forFeature([Finanza]),
-    AuthModule, // Solo importa AuthModule aquí
+    AuthModule,
   ],
   controllers: [FinanzasController],
   providers: [FinanzasService],

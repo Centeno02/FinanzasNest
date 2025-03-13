@@ -11,13 +11,12 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader?.startsWith('Bearer ')) {
       this.logger.warn('Token no enviado o mal formado');
       throw new UnauthorizedException('Token no proporcionado o formato incorrecto');
     }
 
     const token = authHeader.split(' ')[1];
-
     try {
       const user = this.jwtService.verify(token);
       request.user = user;
@@ -28,4 +27,3 @@ export class JwtAuthGuard implements CanActivate {
     }
   }
 }
-
